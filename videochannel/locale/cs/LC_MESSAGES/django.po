@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR vencax77@gmail.com, 2012.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-12 18:12+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+#: contents.py:7
+msgid "video count"
+msgstr "počet videí"
+
+#: contents.py:8
+msgid "count of videos to show."
+msgstr "počet videí k zobrazení"
+
+#: contents.py:12
+msgid "newest videos content"
+msgstr "nejnovější videa"
+
+#: feeds.py:15 templates/videochannel/base.html:5
+msgid "Latest videos"
+msgstr "Nejnovější videa"
+
+#: templates/videochannel/audio.html:6
+#: templates/videochannel/audio_index.html:6
+msgid ""
+"Your browser does not support HTML5. You can just download the media file at "
+msgstr ""
+"Tvůj prohlížeč nepodporuje HTML5. Můžeš si leda medální soubor stáhnout na "
+
+#: templates/videochannel/index.html:12
+msgid "Subscribe to RSS feed!"
+msgstr "Přihlaš se k odběru RSS!"
+
+#: templates/videochannel/index.html:21
+msgid "Nothing found"
+msgstr "Nic"
+
+#: templates/videochannel/index.html:27
+msgid "previous"
+msgstr "předchozí"
+
+#: templates/videochannel/index.html:31
+#, python-format
+msgid "Page %(curr)s of %(tot)s"
+msgstr "Stránka %(curr)s z %(tot)s"
+
+#: templates/videochannel/index.html:35
+msgid "next"
+msgstr "další"

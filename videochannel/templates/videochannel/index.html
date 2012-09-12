@@ -1,0 +1,39 @@
+{% extends "videochannel/base.html" %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}videochannel/flowplayer-3.2.11.min.js"></script>
+{% endblock %}
+
+{% load feincms_tags i18n applicationcontent_tags %}
+
+{% block maincontent %}
+
+<a href="{% app_reverse "videoch-feed" "videochannel.urls" %}">
+	{% trans "Subscribe to RSS feed!" %}<span class="left ui-icon ui-icon-signal-diag"></span>
+</a>
+
+{% for fm in params.found %}
+<div class="indexItem {% cycle 'rowodd' 'roweven' %}">
+{% if fm.type == 'video' %}{% include "videochannel/video_index.html" %}{% endif %}
+{% if fm.type == 'audio' %}{% include "videochannel/audio_index.html" %}{% endif %}
+</div>
+{% empty %}
+{% trans "Nothing found" %}
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if params.found.has_previous %}
+            <a href="?page={{ params.found.previous_page_number }}">{% trans "previous" %}</a>
+        {% endif %}
+
+        <span class="current">
+        	{% blocktrans with params.found.number as curr and params.found.paginator.num_pages as tot %}Page {{ curr }} of {{ tot }}{% endblocktrans %}
+        </span>
+
+        {% if params.found.has_next %}
+            <a href="?page={{ params.found.next_page_number }}">{% trans "next" %}</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

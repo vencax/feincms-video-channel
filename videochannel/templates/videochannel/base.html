@@ -1,0 +1,12 @@
+{% extends feincms_page.template.path|default:"base.html" %}
+{% load i18n applicationcontent_tags %}
+
+{% block extrahead %}
+<link href="{% app_reverse "videoch-feed" "videochannel.urls" %}" title="{% trans 'Latest videos' %}" 
+	rel="alternate" type="application/rss+xml" />
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}videochannel/style.css" />
+{% endblock %}
+

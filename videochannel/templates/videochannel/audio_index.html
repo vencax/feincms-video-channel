@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<audio controls="controls">
+    <source src="{{ content.mediafile.file.url }}" type="audio/ogg" />
+    <source src="{{ content.mediafile.file.url }}.mp3" type="audio/mpeg" />
+    {% trans 'Your browser does not support HTML5. You can just download the media file at ' %}{{ content.mediafile.file.url }}
+</audio>

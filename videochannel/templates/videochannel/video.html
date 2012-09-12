@@ -1,0 +1,92 @@
+{% load i18n feincms_tags %}
+
+<div class="videocontainer ondetail">
+	{% comment %}
+	<video width="640" height="480" controls preload>
+		<source src="{{ fm.file.url }}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></source>
+		{% media_exists fm.file.name .webm %}<source src="{{ fm.file.url }}.webm" type='video/webm; codecs="vp8, vorbis"'></source>{% endmedia_exists %}
+	  	{% media_exists fm.file.name .ogv %}<source src="{{ fm.file.url }}.ogv" type='video/ogg; codecs="theora, vorbis"'></source>{% endmedia_exists %}
+		{% media_exists fm.file.name .srt %}<track src="{{ fm.file.url }}.srt" kind="subtitles" srclang="cs" label="Czech">{% endmedia_exists %}
+	</video>
+	{% endcomment %}
+	<a  href="{{ fm.file.url }}"
+		style="display:block;width:640px;height:480px"  
+	 	id="player"> 
+	</a>
+	<script>
+	flowplayer("player", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
+	    clip: {
+	 
+	        url: '{{ fm.file.url }}',
+	 
+	 		{% media_exists fm.file.name .srt %}
+	        // this is the SubRib file with captions info
+	        captionUrl: '{{ fm.file.url }}.srt',
+	        {% endmedia_exists %}
+	 
+	        // we want to use RTMP since this is a 1,5 hour long movie
+	        //provider: 'rtmp',
+	 
+	        // do not distort widescreen image in fullscreen mode
+	        scaling: 'fit'
+	    },
+	    plugins:  {
+	 		{% media_exists fm.file.name .srt %}
+	        // the captions plugin
+	        captions: {
+	            url: "{{ STATIC_URL }}videochannel/flowplayer.captions-3.2.8.swf",
+	 
+	            // pointer to a content plugin (see below)
+	            captionTarget: 'content'
+	        },
+	 
+	        // configure a content plugin so that it
+	        // looks good for showing subtitles
+	        content: {
+	            url: "{{ STATIC_URL }}videochannel/flowplayer.content-3.2.8.swf",
+	            bottom: 25,
+	            height: 70,
+	            backgroundColor: '#222222',
+	            backgroundGradient: 'none',
+	            border: 0,
+	            textDecoration: 'outline',
+	            style: {
+	                body: {
+	                    fontSize: 24,
+	                    fontFamily: 'Arial',
+	                    textAlign: 'center',
+	                    color: '#ffffff'
+	                }
+	            }
+	        },
+	        {% endmedia_exists %}
+	 
+	        // change default skin to "tube"
+	        controls: {
+	            url: "{{ STATIC_URL }}videochannel/flowplayer.controls-tube-3.2.14.swf"
+	        },
+	        
+	        viral: {
+	            // load the viral videos plugin
+	            url: "{{ STATIC_URL }}videochannel/flowplayer.viralvideos-3.2.13.swf",
+	            email: false,
+	            share: {
+	            	title: '{{ fm.translation.caption }}',
+	                // define a video title used in sharing
+	                description: '{{ fm.translation.description }}',
+	 
+	                // disable livespaces (it's from Micro$oft)
+	                livespaces: false
+	            },
+	            // disable embedding completely, the same syntax can
+	            // be used to disable also email and share
+	            embed: false
+	        },
+	 
+	    },
+	    canvas: {
+	        backgroundGradient: 'none'
+	    }
+	});
+	</script>
+</div>

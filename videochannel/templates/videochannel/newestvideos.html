@@ -1,0 +1,10 @@
+{% load applicationcontent_tags %}
+
+<ul>
+{% for f in found %}
+<li>
+	<h4><a href="{% app_reverse "videoch-detail" "videochannel.urls" f.id %}">{{ f.translation.caption|default:"unnamed" }}</a></h4>
+	<p>{{ f.translation.description }}</p>
+</li>
+{% endfor %}
+</ul>

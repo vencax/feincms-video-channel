@@ -1,0 +1,4 @@
+include README.md
+recursive-include videochannel/static *
+recursive-include videochannel/templates *
+recursive-include videochannel/locale *
