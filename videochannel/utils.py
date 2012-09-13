@@ -7,9 +7,6 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.utils.decorators import wraps
-import re
-import os
-from django.conf import settings
 
 class FcmsMixin(object):
     """
