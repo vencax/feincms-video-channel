@@ -4,95 +4,15 @@
 See: http://camendesign.com/code/video_for_everybody
 {% endcomment %}
 
+<a href="{% app_reverse "videoch-detail" "videochannel.urls" fm.id %}">
 <div class="videocontainer left onindex">
-	{% comment %}
-	<video width="240" height="180" controls preload="auto">
-		<source src="{{ fm.file.url }}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></source>
-		{% media_exists fm.file.name .webm %}<source src="{{ fm.file.url }}.webm" type='video/webm; codecs="vp8, vorbis"'></source>{% endmedia_exists %}
-	  	{% media_exists fm.file.name .ogv %}<source src="{{ fm.file.url }}.ogv" type='video/ogg; codecs="theora, vorbis"'></source>{% endmedia_exists %}
-		{% media_exists fm.file.name .srt %}<track src="{{ fm.file.url }}.srt" kind="subtitles" srclang="cs" label="Czech">{% endmedia_exists %}
-		<object width="240" height="180" type="application/x-shockwave-flash" data="{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf"> 
-		    <param name="movie" value="{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf" /> 
-		    <param name="allowfullscreen" value="true" /> 
-		    <param name="flashvars" value='config={"clip": {"url": "{{ fm.file.url }}", "autoPlay":false, "autoBuffering":true}}' /> 
-		    <p>{% trans 'Your browser does not support HTML5. You can download the media file ' %}<a href="{{ fm.file.url }}">{% trans "here" %}</a>{% media_exists fm.file.url %}, (<a href="{{ fm.file.url }}.srt">{% trans "subtitles" %}</a>){% endmedia_exists %}.</p> 
-	    </object>
-	</video>
-	{% endcomment %}
-	<a  href="{{ fm.file.url }}"
-		style="display:block;width:320px;height:200px"  
-	 	id="player{{ fm.id }}">
-	 	{% media_exists fm.file.name .jpg %}
-	 	<img src="{{ fm.file.url }}.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" 
-	 	style="display:block;width:320px;height:200px" />
-    	{% endmedia_exists %}
-	</a>
-	<script>
-	<!--
-	flowplayer("player{{ fm.id }}", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
-	    clip: {	 
-	        url: '{{ fm.file.url }}',
-	        
-	 		{% media_exists fm.file.name .srt %}
-	        // this is the SubRib file with captions info
-	        captionUrl: '{{ fm.file.url }}.srt',
-	        {% endmedia_exists %}
-
-	        provider: 'pseudo',
-	 
-	        // do not distort widescreen image in fullscreen mode
-	        scaling: 'fit',
-	        
-	        autoPlay: false,
-    		autoBuffering: false
-	    },
-	    plugins:  {
-	 		{% media_exists fm.file.name .srt %}
-	        // the captions plugin
-	        captions: {
-	            url: "{{ STATIC_URL }}videochannel/flowplayer.captions-3.2.8.swf",
-	 
-	            // pointer to a content plugin (see below)
-	            captionTarget: 'content'
-	        },
-	 
-	        // configure a content plugin so that it
-	        // looks good for showing subtitles
-	        content: {
-	            url: "{{ STATIC_URL }}videochannel/flowplayer.content-3.2.8.swf",
-	            bottom: 15,
-	            height: 40,
-	            backgroundColor: '#222222',
-	            backgroundGradient: 'none',
-	            border: 0,
-	            textDecoration: 'outline',
-	            style: {
-	                body: {
-	                    fontSize: 12,
-	                    fontFamily: 'Arial',
-	                    textAlign: 'center',
-	                    color: '#ffffff'
-	                }
-	            }
-	        },
-	        {% endmedia_exists %}
-	 
-	        // change default skin to "tube"
-	        controls: {
-	            url: "{{ STATIC_URL }}videochannel/flowplayer.controls-tube-3.2.14.swf"
-	        },	 		
-	 		
-			pseudo: {
-		        url: "{{ STATIC_URL }}videochannel/flowplayer.pseudostreaming-3.2.11.swf",
-		    }
-	    },
-	    canvas: {
-	        backgroundGradient: 'none'
-	    }
-	});
-	// -->
-	</script>
+	{% media_exists fm.file.name .jpg %}
+ 	<img src="{{ fm.file.url }}.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
+ 	{% else %}
+ 	<img src="{{ STATIC_URL }}/videochannel/play_video_default.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
+	{% endmedia_exists %}
 </div>
-<h3><a href="{% app_reverse "videoch-detail" "videochannel.urls" fm.id %}">{{ fm.translation.caption|default:"unnamed" }}</a></h3>
+<h3>{{ fm.translation.caption|default:"unnamed" }}</h3>
 <p>{{ fm.translation.description }}</p>
 {% if fm.copyright %}<span class="copyright">{{ fm.copyright }}</span>{% endif %}
+</a>

@@ -12,14 +12,16 @@
 	{% trans "Subscribe to RSS feed!" %}<span class="left ui-icon ui-icon-signal-diag"></span>
 </a>
 
+<ul>
 {% for fm in params.found %}
-<div class="indexItem {% cycle 'rowodd' 'roweven' %}">
+<li class="indexItem {% cycle 'rowodd' 'roweven' %}">
 {% if fm.type == 'video' %}{% include "videochannel/video_index.html" %}{% endif %}
 {% if fm.type == 'audio' %}{% include "videochannel/audio_index.html" %}{% endif %}
-</div>
+</li>
 {% empty %}
 {% trans "Nothing found" %}
 {% endfor %}
+</ul>
 
 <div class="pagination">
     <span class="step-links">

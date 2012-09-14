@@ -14,7 +14,6 @@
 	 	id="player"> 
 	</a>
 	<script>
-	<!--
 	flowplayer("player", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
 	    clip: {
 	 
@@ -28,7 +27,7 @@
 	        // we want to use RTMP since this is a 1,5 hour long movie
 	        provider: 'pseudo',
 	        
-	        autoPlay: false,
+	        autoPlay: true,
     		autoBuffering: true,
 	 
 	        // do not distort widescreen image in fullscreen mode
@@ -95,6 +94,5 @@
 	        backgroundGradient: 'none'
 	    }
 	});
-	// -->
 	</script>
 </div>
