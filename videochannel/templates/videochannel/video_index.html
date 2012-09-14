@@ -21,13 +21,17 @@ See: http://camendesign.com/code/video_for_everybody
 	{% endcomment %}
 	<a  href="{{ fm.file.url }}"
 		style="display:block;width:320px;height:200px"  
-	 	id="player{{ fm.id }}"> 
+	 	id="player{{ fm.id }}">
+	 	{% media_exists fm.file.name .jpg %}
+	 	<img src="{{ fm.file.url }}.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" 
+	 	style="display:block;width:320px;height:200px" />
+    	{% endmedia_exists %}
 	</a>
 	<script>
 	flowplayer("player{{ fm.id }}", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
 	    clip: {	 
 	        url: '{{ fm.file.url }}',
-	 		start: 62,
+	        
 	 		{% media_exists fm.file.name .srt %}
 	        // this is the SubRib file with captions info
 	        captionUrl: '{{ fm.file.url }}.srt',
@@ -38,7 +42,9 @@ See: http://camendesign.com/code/video_for_everybody
 	 
 	        // do not distort widescreen image in fullscreen mode
 	        scaling: 'fit',
-	        autoPlay: false
+	        
+	        autoPlay: false,
+    		autoBuffering: true
 	    },
 	    plugins:  {
 	 		{% media_exists fm.file.name .srt %}

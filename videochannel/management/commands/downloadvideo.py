@@ -53,20 +53,24 @@ class Command(NoArgsCommand):
                     info = json.load(f)
                     vidFile = i.rstrip('.info.json')
                     self._processDownloadedFile(vidFile,
-                                                info['title'], 
+                                                info['title'],
                                                 info['description'], mediaPath)
+                    self._saveSplash(vidFile, info['thumbnail'], mediaPath)
                     if subtitlesURL:
                         self._downloadSubtitles(vidFile, subtitlesURL, mediaPath)
         subprocess.call(['rm', '-rf', self.tmp])
                     
-    def _processDownloadedFile(self, vidfile, title, desc, mediaPath):
-        orig = os.path.join(self.tmp, vidfile)
-        new = os.path.join(settings.MEDIA_ROOT, mediaPath, vidfile)
-        subprocess.call(['yamdi', '-i', orig, '-o', new])
+    def _processDownloadedFile(self, vidFile, title, desc, mediaPath):
+        orig = os.path.join(self.tmp, vidFile)
+        new = os.path.join(settings.MEDIA_ROOT, mediaPath, vidFile)
+        if vidFile.endswith('flv'):
+            subprocess.call(['yamdi', '-i', orig, '-o', new])
+        else:
+            subprocess.call(['mv', orig, new])
         try:
-            mf = MediaFile.objects.get(file=os.path.join(mediaPath, vidfile))
+            mf = MediaFile.objects.get(file=os.path.join(mediaPath, vidFile))
         except MediaFile.DoesNotExist:
-            mf = MediaFile(file=os.path.join(mediaPath, vidfile))
+            mf = MediaFile(file=os.path.join(mediaPath, vidFile))
         mf.save()
         tr = mf.get_translation()
         if tr == None:        
@@ -78,3 +82,15 @@ class Command(NoArgsCommand):
     def _downloadSubtitles(self, vidFile, subtitlesURL, mediaPath):
         dest = os.path.join(settings.MEDIA_ROOT, mediaPath, '%s.srt' % vidFile)
         subprocess.call(['wget', '-O', dest, subtitlesURL])
+        
+    def _saveSplash(self, vidFile, thumbURL, mediaPath):
+        thumbMediaPath = os.path.join(mediaPath, '%s.jpg' % vidFile)
+        
+        thumbRealPath = os.path.join(settings.MEDIA_ROOT, thumbMediaPath)
+        subprocess.call(['wget', '-O', thumbRealPath, thumbURL])
+        
+        try:
+            mf = MediaFile.objects.get(file=thumbMediaPath)
+        except MediaFile.DoesNotExist:
+            mf = MediaFile(file=thumbMediaPath)
+        mf.save()
