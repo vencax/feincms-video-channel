@@ -18,6 +18,7 @@ from django.core.management.base import NoArgsCommand
 from videochannel.forms import CONV_INFO_FOLDER
 from django.contrib.staticfiles import finders
 from feincms.module.medialibrary.models import MediaFile, MediaFileTranslation
+import glob
 
 class Command(NoArgsCommand):
     help = 'Download videos from well known video services.' #@ReservedAssignment
@@ -44,29 +45,31 @@ class Command(NoArgsCommand):
         subprocess.call(['mkdir', self.tmp])
         script = finders.find('videochannel/dowloadYT.sh')
         subprocess.call([script, url])
+        if not glob.glob(os.path.join(self.tmp, '*.flv')):
+            subprocess.call([script, url, '--all-formats'])
         
-        for i in os.listdir(self.tmp):
-            if i.endswith('.json'):
-                with open(os.path.join(self.tmp, i)) as f:
-                    now = datetime.datetime.now()
-                    mediaPath = now.strftime(fcms_settings.FEINCMS_MEDIALIBRARY_UPLOAD_TO)
-                    info = json.load(f)
-                    vidFile = i.rstrip('.info.json')
-                    self._processDownloadedFile(vidFile,
-                                                info['title'],
-                                                info['description'], mediaPath)
-                    self._saveSplash(vidFile, info['thumbnail'], mediaPath)
-                    if subtitlesURL:
-                        self._downloadSubtitles(vidFile, subtitlesURL, mediaPath)
+        try:
+            flv = os.path.basename(glob.glob(os.path.join(self.tmp, '*.flv'))[0])
+        except IndexError:
+            return
+        
+        infoFile = os.path.join(self.tmp, '%s.info.json' % flv)    
+        with open(os.path.join(infoFile)) as f:
+            now = datetime.datetime.now()
+            mediaPath = now.strftime(fcms_settings.FEINCMS_MEDIALIBRARY_UPLOAD_TO)
+            info = json.load(f)
+            self._processDownloadedFile(flv,
+                                        info['title'],
+                                        info['description'], mediaPath)
+            self._saveSplash(flv, info['thumbnail'], mediaPath)
+            if subtitlesURL:
+                self._downloadSubtitles(flv, subtitlesURL, mediaPath)
         subprocess.call(['rm', '-rf', self.tmp])
                     
     def _processDownloadedFile(self, vidFile, title, desc, mediaPath):
         orig = os.path.join(self.tmp, vidFile)
         new = os.path.join(settings.MEDIA_ROOT, mediaPath, vidFile)
-        if vidFile.endswith('flv'):
-            subprocess.call(['yamdi', '-i', orig, '-o', new])
-        else:
-            subprocess.call(['mv', orig, new])
+        subprocess.call(['yamdi', '-i', orig, '-o', new])
         try:
             mf = MediaFile.objects.get(file=os.path.join(mediaPath, vidFile))
         except MediaFile.DoesNotExist:
