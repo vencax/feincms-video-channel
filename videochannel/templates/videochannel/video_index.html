@@ -25,10 +25,9 @@ See: http://camendesign.com/code/video_for_everybody
 	</a>
 	<script>
 	flowplayer("player{{ fm.id }}", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
-	    clip: {
-	 
+	    clip: {	 
 	        url: '{{ fm.file.url }}',
-	 
+	 		start: 62,
 	 		{% media_exists fm.file.name .srt %}
 	        // this is the SubRib file with captions info
 	        captionUrl: '{{ fm.file.url }}.srt',

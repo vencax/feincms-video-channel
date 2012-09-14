@@ -62,7 +62,7 @@ class Command(NoArgsCommand):
     def _processDownloadedFile(self, vidfile, title, desc, mediaPath):
         orig = os.path.join(self.tmp, vidfile)
         new = os.path.join(settings.MEDIA_ROOT, mediaPath, vidfile)
-        subprocess.call(['mv', orig, new])
+        subprocess.call(['yamdi', '-i', orig, '-o', new])
         try:
             mf = MediaFile.objects.get(file=os.path.join(mediaPath, vidfile))
         except MediaFile.DoesNotExist:

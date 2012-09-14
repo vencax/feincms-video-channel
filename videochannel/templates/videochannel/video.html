@@ -25,7 +25,10 @@
 	        {% endmedia_exists %}
 	 
 	        // we want to use RTMP since this is a 1,5 hour long movie
-	        //provider: 'rtmp',
+	        provider: 'pseudo',
+	        
+	        autoPlay: false,
+    		autoBuffering: true,
 	 
 	        // do not distort widescreen image in fullscreen mode
 	        scaling: 'fit'
@@ -82,7 +85,13 @@
 	            // be used to disable also email and share
 	            embed: false
 	        },
-	 
+	 		
+			pseudo: {
+		        url: "{{ STATIC_URL }}videochannel/flowplayer.pseudostreaming-3.2.11.swf",
+		 
+		        // use ${start} as a placeholder for the target keyframe
+		        queryString: escape('?target=${start}&secretToken=1235oh8qewr5uweynkc')
+		    }
 	    },
 	    canvas: {
 	        backgroundGradient: 'none'
