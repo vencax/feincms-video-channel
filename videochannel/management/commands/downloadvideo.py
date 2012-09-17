@@ -11,6 +11,8 @@ import subprocess
 import json
 import pickle
 import datetime
+import glob
+import sub2srt
 
 from django.conf import settings
 from feincms import settings as fcms_settings
@@ -18,7 +20,7 @@ from django.core.management.base import NoArgsCommand
 from videochannel.forms import CONV_INFO_FOLDER
 from django.contrib.staticfiles import finders
 from feincms.module.medialibrary.models import MediaFile, MediaFileTranslation
-import glob
+from django.template.defaultfilters import mark_safe
 
 class Command(NoArgsCommand):
     help = 'Download videos from well known video services.' #@ReservedAssignment
@@ -53,7 +55,7 @@ class Command(NoArgsCommand):
         except IndexError:
             return
         
-        infoFile = os.path.join(self.tmp, '%s.info.json' % flv)    
+        infoFile = os.path.join(self.tmp, '%s.info.json' % flv)
         with open(os.path.join(infoFile)) as f:
             now = datetime.datetime.now()
             mediaPath = now.strftime(fcms_settings.FEINCMS_MEDIALIBRARY_UPLOAD_TO)
@@ -64,6 +66,8 @@ class Command(NoArgsCommand):
             self._saveSplash(flv, info['thumbnail'], mediaPath)
             if subtitlesURL:
                 self._downloadSubtitles(flv, subtitlesURL, mediaPath)
+            else:
+                self._saveYTSubtitles(info['id'], flv, mediaPath)
         subprocess.call(['rm', '-rf', self.tmp])
                     
     def _processDownloadedFile(self, vidFile, title, desc, mediaPath):
@@ -78,14 +82,17 @@ class Command(NoArgsCommand):
         tr = mf.get_translation()
         if tr == None:        
             tr = MediaFileTranslation(parent=mf, language_code='cs')
-        tr.caption = title
-        tr.description = desc
+        tr.caption = mark_safe(title)
+        tr.description = mark_safe(desc)
         tr.save()
         
     def _downloadSubtitles(self, vidFile, subtitlesURL, mediaPath):
-        dest = os.path.join(settings.MEDIA_ROOT, mediaPath, '%s.srt' % vidFile)
+        dest = self._get_subtitles_file(vidFile, mediaPath)
         subprocess.call(['wget', '-O', dest, subtitlesURL])
         
+    def _get_subtitles_file(self, vidFile, mediaPath):
+        return os.path.join(settings.MEDIA_ROOT, mediaPath, '%s.srt' % vidFile)
+    
     def _saveSplash(self, vidFile, thumbURL, mediaPath):
         thumbMediaPath = os.path.join(mediaPath, '%s.jpg' % vidFile)
         
@@ -97,3 +104,15 @@ class Command(NoArgsCommand):
         except MediaFile.DoesNotExist:
             mf = MediaFile(file=thumbMediaPath)
         mf.save()
+
+    def _saveYTSubtitles(self, ID, vidFile, mediaPath):
+        url = 'http://video.google.com/timedtext?hl=%(LANG)s&v=%(ID)s&lang=%(LANG)s'
+        url = url % {'LANG': 'cs', 'ID': ID}
+        import urllib
+        destFile = self._get_subtitles_file(vidFile, mediaPath)
+        try:
+            savedfile, headers = urllib.urlretrieve(url)
+            if not hasattr(headers, 'Content-Length') or int(headers['Content-Length']) > 0:
+                sub2srt.convert(savedfile, destFile)
+        except Exception:
+            pass
