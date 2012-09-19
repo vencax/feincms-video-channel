@@ -76,7 +76,7 @@
 	            share: {
 	            	title: '{{ fm.translation.caption }}',
 	                // define a video title used in sharing
-	                description: '{{ fm.translation.description }}',
+	                description: '{{ fm.translation.description|escapejs }}',
 	 
 	                // disable livespaces (it's from Micro$oft)
 	                livespaces: false

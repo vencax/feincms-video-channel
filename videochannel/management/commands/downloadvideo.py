@@ -21,6 +21,7 @@ from videochannel.forms import CONV_INFO_FOLDER
 from django.contrib.staticfiles import finders
 from feincms.module.medialibrary.models import MediaFile, MediaFileTranslation
 from django.template.defaultfilters import mark_safe
+import urllib2
 
 class Command(NoArgsCommand):
     help = 'Download videos from well known video services.' #@ReservedAssignment
@@ -44,7 +45,8 @@ class Command(NoArgsCommand):
             os.remove(ifile)
         
     def _download(self, url, name, subtitlesURL):
-        subprocess.call(['mkdir', self.tmp])
+        if not os.path.exists(self.tmp):
+            os.mkdir(self.tmp)
         script = finders.find('videochannel/dowloadYT.sh')
         subprocess.call([script, url])
         if not glob.glob(os.path.join(self.tmp, '*.flv')):
@@ -108,11 +110,13 @@ class Command(NoArgsCommand):
     def _saveYTSubtitles(self, ID, vidFile, mediaPath):
         url = 'http://video.google.com/timedtext?hl=%(LANG)s&v=%(ID)s&lang=%(LANG)s'
         url = url % {'LANG': 'cs', 'ID': ID}
-        import urllib
         destFile = self._get_subtitles_file(vidFile, mediaPath)
         try:
-            savedfile, headers = urllib.urlretrieve(url)
-            if not hasattr(headers, 'Content-Length') or int(headers['Content-Length']) > 0:
-                sub2srt.convert(savedfile, destFile)
+            r = urllib2.urlopen(url, timeout=3)
+            if r.code == 200:
+                savedFile = os.path.join(self.tmp, 'titles.txt')
+                with open(savedFile, 'w') as f:
+                    f.write(r.read())
+                sub2srt.convert(savedFile, destFile)
         except Exception:
             pass
