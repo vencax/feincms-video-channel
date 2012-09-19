@@ -74,7 +74,7 @@
 	            url: "{{ STATIC_URL }}videochannel/flowplayer.viralvideos-3.2.13.swf",
 	            email: false,
 	            share: {
-	            	title: '{{ fm.translation.caption }}',
+	            	title: '{{ fm.translation.caption|escapejs }}',
 	                // define a video title used in sharing
 	                description: '{{ fm.translation.description|escapejs }}',
 	 
