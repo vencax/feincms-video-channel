@@ -1,0 +1,10 @@
+{% extends "videochannel/conv.html" %}
+
+{% load feincms_tags i18n applicationcontent_tags %}
+
+{% block breadcrumbs %}
+<li><a href="{{feincms_page.get_absolute_url}}">{{feincms_page.title}}</a></li>
+<li class="selected">&raquo; {% trans "Subtitle download" %}</li>
+{% endblock %}
+
+{% block content_title %}<h1>{% trans "Subtitle download" %}</h1>{% endblock %}

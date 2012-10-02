@@ -34,3 +34,14 @@ class YTConvForm(forms.Form):
         vidFile = os.path.join(settings.MEDIA_ROOT, '_vidConversion', vidID)
         with open(vidFile, 'w') as f:
             pickle.dump((videoURL, cleaned['videoName'], cleaned['subtitlesURL']), f)
+
+            
+class SubDownloadForm(forms.Form):
+    desiredType = forms.ChoiceField(label=_('desired format'), choices=(
+        ('SRT', 'SRT'),
+        ('PLAIN', 'PLAIN')
+    ))
+    videoURL = forms.CharField(label=_('video URL'))
+    lang = forms.ChoiceField(label=_('subtitle language'), choices=(
+        ('cs', 'czech'),
+    ))
