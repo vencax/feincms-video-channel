@@ -18,14 +18,15 @@ class Video(models.Model):
         verbose_name_plural = _('videos')
 
     mediaFile = models.ForeignKey(MediaFile, verbose_name=_('media file'))
+
     thumbnail = models.ImageField(upload_to='vids_thumbs',
-                                 null=True,
-                                 verbose_name=_('thumbnail file'),
-                                 help_text=_('Thumbnail picture of the video'))
+        null=True, verbose_name=_('thumbnail file'),
+        help_text=_('Thumbnail picture of the video'))
+
     subtitles = models.FileField(upload_to='vids_subtitles',
-                                 null=True, blank=True,
-                                 verbose_name=_('subtitles file'),
-                                 help_text=_('Only SRT files are supported'))
+        null=True, blank=True, verbose_name=_('subtitles file'),
+        help_text=_('Only SRT subtitles are supported'))
+
     slug = models.SlugField(_('slug'), max_length=100, blank=True)
 
     @models.permalink

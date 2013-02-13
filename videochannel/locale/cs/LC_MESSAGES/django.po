@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-13 16:01+0200\n"
+"POT-Creation-Date: 2013-02-13 07:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 
-#: contents.py:7
+#: contents.py:8
 msgid "video count"
 msgstr "počet videí"
 
-#: contents.py:8
+#: contents.py:9
 msgid "count of videos to show."
 msgstr "počet videí k zobrazení"
 
-#: contents.py:12
+#: contents.py:13
 msgid "newest videos content"
 msgstr "nejnovější videa"
 
@@ -34,35 +34,77 @@ msgstr "nejnovější videa"
 msgid "Latest videos"
 msgstr "Nejnovější videa"
 
-#: forms.py:20
+#: forms.py:24
+msgid "Only SRT subtitles are supported"
+msgstr "Pouze titulky v SRT formatu jsou podporovány"
+
+#: forms.py:35 forms.py:60
 msgid "video URL"
 msgstr "URL videa"
 
-#: forms.py:21
+#: forms.py:36
 msgid "paste address bar content of the page with the video"
 msgstr "vlož adresu z adresního řádku stránky na youtube s videem"
 
-#: forms.py:22
+#: forms.py:37
 msgid "video name"
 msgstr "název videa"
 
-#: forms.py:23
+#: forms.py:38
 msgid "paste name of the video (optional)"
 msgstr "vlož název videa (nepovinné, použije se název z youtube)"
 
-#: forms.py:24
+#: forms.py:39
 msgid "subtitles URL"
 msgstr "URL titulků"
 
-#: forms.py:25
-msgid "paste address on which the subtitles to this video are (optional)"
-msgstr "vlož URL na kterém jsou titulky k tomuto videu (nepovinné, titulky nejsou - pro dabované video)"
+#: forms.py:40
+msgid "paste this video subtitles address URL (optional)"
+msgstr ""
+"vlož URL na kterém jsou titulky k tomuto videu (nepovinné, titulky nejsou - "
+"pro dabované video)"
 
-#: forms.py:33
+#: forms.py:48
 msgid "bad youtuybe video URL"
 msgstr "spatná adresa youtube videa"
 
-#: views.py:57
+#: forms.py:56
+msgid "desired format"
+msgstr "požadovaný"
+
+#: forms.py:61
+msgid "subtitle language"
+msgstr "jazyk titulků"
+
+#: models.py:17
+msgid "video"
+msgstr "video"
+
+#: models.py:18
+msgid "videos"
+msgstr "videa"
+
+#: models.py:20
+msgid "media file"
+msgstr "medialní soubor"
+
+#: models.py:23
+msgid "thumbnail file"
+msgstr "náhled"
+
+#: models.py:24
+msgid "Thumbnail picture of the video"
+msgstr "náhled videa (zobrazován na v seznamu videí)"
+
+#: models.py:27
+msgid "subtitles file"
+msgstr "soubor s titulky"
+
+#: models.py:29
+msgid "slug"
+msgstr "slug"
+
+#: views.py:55
 msgid "Video was added for conversion"
 msgstr "Video přidáno do fronty pro konverzi"
 
@@ -81,19 +123,24 @@ msgstr "Konverze videí z youtube"
 msgid "Subscribe to RSS feed!"
 msgstr "Přihlaš se k odběru RSS!"
 
-#: templates/videochannel/index.html:21
+#: templates/videochannel/index.html:32
 msgid "Nothing found"
 msgstr "Nic"
 
-#: templates/videochannel/index.html:27
+#: templates/videochannel/index.html:39
 msgid "previous"
 msgstr "předchozí"
 
-#: templates/videochannel/index.html:31
+#: templates/videochannel/index.html:43
 #, python-format
 msgid "Page %(curr)s of %(tot)s"
 msgstr "Stránka %(curr)s z %(tot)s"
 
-#: templates/videochannel/index.html:35
+#: templates/videochannel/index.html:47
 msgid "next"
 msgstr "další"
+
+#: templates/videochannel/sub_download.html:7
+#: templates/videochannel/sub_download.html:10
+msgid "Subtitle download"
+msgstr "Stahování titulků"

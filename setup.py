@@ -1,10 +1,25 @@
 #!/usr/bin/env python
-from setuptools import setup, find_packages
 import os
+import subprocess
+from setuptools import setup, find_packages
+from setuptools.command.install import install
 
-README_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'README')
+README_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                           'README')
 
-description = '''Presents video files stored in mediafiles in youtube like channel.'''
+description = '''
+Presents video files stored in mediafilesin youtube like channel.
+'''
+
+
+class MyInstall(install):
+    def run(self):
+        projpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                'videochannel')
+        print 'Generating MO files in %s' % projpath
+        subprocess.call(['django-admin.py', 'compilemessages'],
+                        cwd=projpath)
+        install.run(self)
 
 if os.path.exists(README_PATH):
     long_description = open(README_PATH).read()
@@ -26,4 +41,5 @@ setup(name='feincms-video-channel',
     ],
     keywords="feincms video channel",
     include_package_data=True,
+    cmdclass={'install': MyInstall}
 )
