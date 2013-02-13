@@ -2,26 +2,25 @@
 
 {% load feincms_tags i18n applicationcontent_tags %}
 
-{% block title %}{{ block.super }} {{ fm.translation.caption }}{% endblock %}
-{% block description %}{{ fm.translation.description }}{% endblock %}
+{% block title %}{{ block.super }} {{ fm.mediaFile.translation.caption }}{% endblock %}
+{% block description %}{{ fm.mediaFile.translation.description }}{% endblock %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}videochannel/flowplayer-3.2.11.min.js"></script>
 {% endblock %}
 
 {% block breadcrumbs %}
-<li><a href="{{feincms_page.get_absolute_url}}">{{feincms_page.title}}</a></li>
-<li class="selected">&raquo; {{ fm.translation.caption|default:"unnamed" }}</li>
+<li><a href="{{ feincms_page.get_absolute_url }}">{{ feincms_page.title }}</a></li>
+<li class="selected">&raquo; {{ fm.mediaFile.translation.caption|default:"unnamed" }}</li>
 {% endblock %}
 
-{% block content_title %}<h1>{{ fm.translation.caption|default:"unnamed" }}</h1>{% endblock %}
+{% block content_title %}<h1>{{ fm.mediaFile.translation.caption|default:"unnamed" }}</h1>{% endblock %}
 
 {% block maincontent %}
 
-{% if fm.type == 'video' %}{% include "videochannel/video.html" %}{% endif %}
-{% if fm.type == 'audio' %}{% include "videochannel/audio.html" %}{% endif %}
+{% include "videochannel/video.html" %}
 
-<p>{{ fm.translation.description }}</p>
-{% if fm.copyright %}<span class="copyright">{{ fm.copyright }}</span>{% endif %}
+<p>{{ fm.mediaFile.translation.description }}</p>
+{% if fm.mediaFile.copyright %}<span class="copyright">{{ fm.mediaFile.copyright }}</span>{% endif %}
 
 {% endblock %}

@@ -6,11 +6,11 @@ See: http://camendesign.com/code/video_for_everybody
 
 <a href="{% app_reverse "videoch-detail" "videochannel.urls" fm.id %}">
 <div class="videocontainer left onindex">
-	{% media_exists fm.file.name .jpg %}
- 	<img src="{{ fm.file.url }}.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
+	{% if fm.thumbnail %}
+ 	<img src="{{ fm.thumbnail.url }}" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
  	{% else %}
  	<img src="{{ STATIC_URL }}/videochannel/play_video_default.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
-	{% endmedia_exists %}
+	{% endif %}
 </div>
 <h3>{{ fm.translation.caption|default:"unnamed" }}</h3>
 <p>{{ fm.translation.description }}</p>

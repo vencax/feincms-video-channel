@@ -3,13 +3,13 @@
 <div class="videocontainer ondetail">
 	{% comment %}
 	<video width="640" height="480" controls preload>
-		<source src="{{ fm.file.url }}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></source>
-		{% media_exists fm.file.name .webm %}<source src="{{ fm.file.url }}.webm" type='video/webm; codecs="vp8, vorbis"'></source>{% endmedia_exists %}
-	  	{% media_exists fm.file.name .ogv %}<source src="{{ fm.file.url }}.ogv" type='video/ogg; codecs="theora, vorbis"'></source>{% endmedia_exists %}
-		{% media_exists fm.file.name .srt %}<track src="{{ fm.file.url }}.srt" kind="subtitles" srclang="cs" label="Czech">{% endmedia_exists %}
+		<source src="{{ fm.mediaFile.file.url }}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></source>
+		{% media_exists fm.mediaFile.file.name .webm %}<source src="{{ fm.mediaFile.file.url }}.webm" type='video/webm; codecs="vp8, vorbis"'></source>{% endmedia_exists %}
+	  	{% media_exists fm.mediaFile.file.name .ogv %}<source src="{{ fm.mediaFile.file.url }}.ogv" type='video/ogg; codecs="theora, vorbis"'></source>{% endmedia_exists %}
+		{% media_exists fm.mediaFile.file.name .srt %}<track src="{{ fm.mediaFile.file.url }}.srt" kind="subtitles" srclang="cs" label="Czech">{% endmedia_exists %}
 	</video>
 	{% endcomment %}
-	<a  href="{{ fm.file.url }}"
+	<a  href="{{ fm.mediaFile.file.url }}"
 		style="display:block;width:640px;height:480px"  
 	 	id="player"> 
 	</a>
@@ -17,12 +17,12 @@
 	flowplayer("player", "{{ STATIC_URL }}videochannel/flowplayer-3.2.15.swf", {
 	    clip: {
 	 
-	        url: '{{ fm.file.url }}',
+	        url: '{{ fm.mediaFile.file.url }}',
 	 
-	 		{% media_exists fm.file.name .srt %}
+	 		{% if fm.subtitles %}
 	        // this is the SubRib file with captions info
-	        captionUrl: '{{ fm.file.url }}.srt',
-	        {% endmedia_exists %}
+	        captionUrl: '{{ fm.subtitles.url }}',
+	        {% endif %}
 	 
 	        // we want to use RTMP since this is a 1,5 hour long movie
 	        provider: 'pseudo',
@@ -34,7 +34,7 @@
 	        scaling: 'fit'
 	    },
 	    plugins:  {
-	 		{% media_exists fm.file.name .srt %}
+	 		{% if fm.subtitles %}
 	        // the captions plugin
 	        captions: {
 	            url: "{{ STATIC_URL }}videochannel/flowplayer.captions-3.2.8.swf",
@@ -62,7 +62,7 @@
 	                }
 	            }
 	        },
-	        {% endmedia_exists %}
+	        {% endif %}
 	 
 	        // change default skin to "tube"
 	        controls: {

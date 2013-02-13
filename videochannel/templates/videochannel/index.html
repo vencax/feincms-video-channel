@@ -14,12 +14,22 @@
 
 <ul>
 {% for fm in params.found %}
-<li class="indexItem {% cycle 'rowodd' 'roweven' %}">
-{% if fm.type == 'video' %}{% include "videochannel/video_index.html" %}{% endif %}
-{% if fm.type == 'audio' %}{% include "videochannel/audio_index.html" %}{% endif %}
-</li>
+	<li class="indexItem {% cycle 'rowodd' 'roweven' %}">
+		<a href="{{ fm.get_absolute_url }}">
+		<div class="videocontainer left onindex">
+			{% if fm.thumbnail %}
+		 	<img src="{{ fm.thumbnail.url }}" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
+		 	{% else %}
+		 	<img src="{{ STATIC_URL }}/videochannel/play_video_default.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
+			{% endif %}
+		</div>
+		<h3>{{ fm.translation.caption|default:"unnamed" }}</h3>
+		<p>{{ fm.translation.description }}</p>
+		{% if fm.copyright %}<span class="copyright">{{ fm.copyright }}</span>{% endif %}
+		</a>
+	</li>
 {% empty %}
-{% trans "Nothing found" %}
+	{% trans "Nothing found" %}
 {% endfor %}
 </ul>
 
@@ -38,4 +48,5 @@
         {% endif %}
     </span>
 </div>
+
 {% endblock %}

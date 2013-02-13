@@ -13,10 +13,10 @@ class LatestVideosFeed(Feed):
 
     feed_type = Atom1Feed
     title = u'%s: %s' % (site.name, _('Latest videos'))
-    
+
     def link(self):
-        return app_reverse('videoch-feed', 'videochannel.urls') 
-        
+        return app_reverse('videoch-feed', 'videochannel.urls')
+
     def items(self):
         return MediaFile.objects.filter(type__in=['video'])\
             .order_by('-created')[:10]
@@ -25,5 +25,5 @@ class LatestVideosFeed(Feed):
         return item.created
 
     def item_link(self, item):
-        return app_reverse('videoch-detail', 'videochannel.urls', 
+        return app_reverse('videoch-detail', 'videochannel.urls',
                            kwargs={'mfile_id': item.id,})
