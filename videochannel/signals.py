@@ -12,19 +12,23 @@ def videoPostSavedHandler(instance, created, **kwargs):
 
     if created:
         orig = instance.mediaFile.file.file.name
-        tmp = '%s.yamdiconverted' % orig
-        p = subprocess.Popen(['yamdi', '-i', orig, '-o', tmp],
-                             stderr=subprocess.PIPE)
-        rv = p.wait()
-        if rv == 0:
-            os.remove(orig)
-            os.rename(tmp, orig)
-        else:
-            os.remove(tmp)
-            _, err = p.communicate()
-            return err
+        prepareForPseudoStreaming(orig)
 
 
 def videoPreSavedHandler(instance, **kwargs):
     if not instance.slug:
         instance.slug = unicode(slugify(instance.mediaFile.translation))
+
+
+def prepareForPseudoStreaming(vidfile):
+    tmp = '%s.yamdiconverted' % vidfile
+    p = subprocess.Popen(['yamdi', '-i', vidfile, '-o', tmp],
+                         stderr=subprocess.PIPE)
+    rv = p.wait()
+    if rv == 0:
+        os.remove(vidfile)
+        os.rename(tmp, vidfile)
+    else:
+        os.remove(tmp)
+        _, err = p.communicate()
+        return err

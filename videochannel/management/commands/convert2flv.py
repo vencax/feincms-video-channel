@@ -11,6 +11,7 @@ import subprocess
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from videochannel.models import Video
+from videochannel.signals import prepareForPseudoStreaming
 
 
 class Command(NoArgsCommand):
@@ -33,6 +34,7 @@ class Command(NoArgsCommand):
         destFile = '%sflv' % mFile.file.name.rstrip(ext)
         try:
             self.encode_to_flv(mFile.file.name, destFile)
+            prepareForPseudoStreaming(destFile)
             os.rename(mFile.file.name, '%s.old' % mFile.file.name)
             mFile.name = dest
             mFile.save()
@@ -51,11 +53,10 @@ class Command(NoArgsCommand):
             'ffmpeg', '-i', source, '-vcodec', 'libx264',
             '-vpre', 'default', '-acodec', 'libmp3lame',
             '-ar', '44100', '-aq', '4', '-ac', '2', '-s', self.RESOLUTION,
-            '-b', '%ik' % self.BITRATE,
+            '-b', '%sk' % self.BITRATE,
             dest
         ]
-        p = subprocess.Popen(called,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(called)
         rv = p.wait()
         if rv != 0:
-            raise Exception(p.communicate()[1])
+            raise Exception(rv)
