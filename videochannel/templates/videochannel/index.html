@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}videochannel/flowplayer-3.2.11.min.js"></script>
 {% endblock %}
 
-{% load feincms_tags i18n applicationcontent_tags %}
+{% load feincms_tags i18n applicationcontent_tags feincms_thumbnail %}
 
 {% block maincontent %}
 
@@ -12,26 +12,26 @@
 	{% trans "Subscribe to RSS feed!" %}<span class="left ui-icon ui-icon-signal-diag"></span>
 </a>
 
-<ul>
 {% for fm in params.found %}
-	<li class="indexItem {% cycle 'rowodd' 'roweven' %}">
-		<a href="{{ fm.get_absolute_url }}">
-		<div class="videocontainer left onindex">
-			{% if fm.thumbnail %}
-		 	<img src="{{ fm.thumbnail.url }}" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
-		 	{% else %}
-		 	<img src="{{ STATIC_URL }}/videochannel/play_video_default.jpg" alt="{{ fm.translation.caption|default:"unnamed" }} splash" />
-			{% endif %}
-		</div>
-		<h3>{{ fm.translation.caption|default:"unnamed" }}</h3>
-		<p>{{ fm.translation.description }}</p>
-		{% if fm.copyright %}<span class="copyright">{{ fm.copyright }}</span>{% endif %}
-		</a>
-	</li>
+<div class="indexItem {% cycle 'rowodd' 'roweven' %}">
+  <article>
+	<a href="{{ fm.get_absolute_url }}">
+		
+	  <h3>{{ fm.mediaFile.translation.caption|default:"unnamed" }}</h3>
+		
+	  <img class="thumb" src="{{ fm.thumbnail.file|thumbnail:"240x180" }}"
+		alt="{{ fm.mediaFile.translation.caption|default:"unnamed" }} splash">		
+		
+	</a>
+	<p>{{ fm.mediaFile.translation.description }}</p>
+	{% if fm.copyright %}
+	<span class="copyright">{{ fm.mediaFile.copyright }}</span>
+	{% endif %}		
+  </article>
+</div>
 {% empty %}
-	{% trans "Nothing found" %}
+	<p>{% trans "Nothing found" %}</p>
 {% endfor %}
-</ul>
 
 <div class="pagination">
     <span class="step-links">
